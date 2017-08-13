@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>Test site for vue</title>
+    <script src="https://unpkg.com/vue@2.4.2"></script>
+  </head>
+  <body>
+    <div id="app">
+      {{ message }}
+    </div>
+    <div id="app2">
+      <span v-bind:title='message'>
+        Hover over me to see message!
+
+      </span>
+
+    </div>
+
+  </body>
+  <script type="text/javascript">
+   const app = new Vue({
+      el: "#app",
+      data: {
+        message: 'Hello World! Im VUEEEEEEEE'
+      }
+    });
+
+  const app2 = new Vue({
+    el: "#app2",
+    data: {
+      message: "You have hovered over me on: " + new Date()
+    }
+  });
+
+
+  </script>
+</html>
