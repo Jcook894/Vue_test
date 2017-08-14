@@ -37,9 +37,34 @@ to todo. -->
   </p>
     <button v-on:click="toggleMessage"> Reverse me!</button>
 </div>
+
+<div id="app6">
+  <p>
+    {{ message }}
+  </p>
+  <input v-model="message" />
+</div>
+
+<!-- Takes the vue component, loops through the groceryList array and binds them to the component-->
+<div id="app7">
+  <ol>
+    <!--
+      Now we provide each todo-item with the todo object
+      it's representing, so that its content can be dynamic.
+      We also need to provide each component with a "key",
+      which will be explained later.
+    -->
+    <todo-item
+      v-for="item in groceryList"
+      v-bind:todo="item"
+      v-bind:key="item.id" />
+  </ol>
+
+</div>
   </body>
   <script type="text/javascript">
-   const app = new Vue({
+
+  const app = new Vue({
       el: "#app",
       data: {
         message: 'Hello World! Im VUEEEEEEEE'
@@ -82,5 +107,35 @@ to todo. -->
       }
     }
   });
+
+    const app6 = new Vue({
+      el: '#app6',
+      data: {
+        message: "Hello, I am a two-way binding."
+      },
+    });
+
+/* Defining a component called todo-item */
+    Vue.component('todo-item',{
+      //The todo-item component now accepts a "prop", which is like a custom
+      //attribute. This prop is called todo.
+      props:['todo'],
+      template: '<li>{{todo.text}}</li>'
+
+    });
+
+/* The grocery list the component loops through and binds to the template */ 
+    const app7 = new Vue({
+      el: '#app7',
+      data:{
+        groceryList: [
+          {id:0 , text:"Some bananas bruh"},
+          {id:1 , text:"Some apple my guys"},
+          {id:2 , text:"Some grapes homies!"}
+        ]
+      }
+    });
+
+
   </script>
 </html>
