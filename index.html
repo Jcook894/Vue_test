@@ -4,17 +4,39 @@
     <script src="https://unpkg.com/vue@2.4.2"></script>
   </head>
   <body>
+<!-- -->
     <div id="app">
       {{ message }}
     </div>
+<!-- -->
     <div id="app2">
       <span v-bind:title='message'>
         Hover over me to see message!
 
       </span>
-
+<!--Using a conditional binding to show the text or not. -->
     </div>
-
+    <div id='app3'>
+      <p v-if="seen">
+        Now you see me!
+      </p>
+    </div>
+<!-- Vue for-loop binding that loops throught the todos array and sets the text prop
+to todo. -->
+    <div id="app4">
+      <ul v-for="todo in todos">
+        <li>
+          {{ todo.text }}
+        </li>
+      </ul>
+    </div>
+<!-- Vue binding on click, takes the toggleMessage method(which takes the message and reverses it) binds it to the button and reverses the message on click-->
+<div id="app5">
+  <p>
+    {{ message }}
+  </p>
+    <button v-on:click="toggleMessage"> Reverse me!</button>
+</div>
   </body>
   <script type="text/javascript">
    const app = new Vue({
@@ -31,6 +53,34 @@
     }
   });
 
+  const app3 = new Vue({
+    el: '#app3',
+    data:{
+      seen: true
+    }
+  });
 
+  const app4 = new Vue({
+    el: '#app4',
+    data:{
+      todos: [
+        {text: "Learn React"},
+        {text: "Learn Vue"},
+        {text: "Learn All of them!!!!"}
+      ]
+    }
+  });
+
+  const app5 = new Vue ({
+    el:"#app5",
+    data:{
+      message: "Hello, my name is Julian Cook and I am a Developer"
+    },
+    methods: {
+      toggleMessage(){
+        this.message = this.message.split('').reverse().join('');
+      }
+    }
+  });
   </script>
 </html>
