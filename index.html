@@ -2,6 +2,8 @@
   <head>
     <title>Test site for vue</title>
     <script src="https://unpkg.com/vue@2.4.2"></script>
+    <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
   </head>
   <body>
 <!-- -->
@@ -61,6 +63,33 @@ to todo. -->
   </ol>
 
 </div>
+
+<div id="example">
+  <p>
+    Original Message: {{ message }}
+  </p>
+  <p>
+    Reversed Message: {{ reversedMessage }}
+  </p>
+
+</div>
+<div id="exampleWatch">
+  <p>
+    Ask a yes/no question:
+  </p>
+    <input v-model="question" />
+    <p>
+      {{ answer }}
+    </p>
+</div>
+
+<div id="example1">
+  <p>
+    {{ fullName }}
+  </p>
+</div>
+
+
   </body>
   <script type="text/javascript">
 
@@ -124,7 +153,7 @@ to todo. -->
 
     });
 
-/* The grocery list the component loops through and binds to the template */ 
+/* The grocery list the component loops through and binds to the template */
     const app7 = new Vue({
       el: '#app7',
       data:{
@@ -137,5 +166,73 @@ to todo. -->
     });
 
 
+    const vm = new Vue({
+    el: '#example',
+    data: {
+      message: "Turn me around!"
+    },
+    computed: {
+      reversedMessage: function() {
+        return this.message.split('').reverse().join('');
+      }
+    }
+  });
+
+  const vm1 = new Vue({
+    el: "#example1",
+    data: {
+      firstName: "Julian",
+      lastName: "Cook"
+    },
+    computed: {
+      fullName: function(){
+        return this.firstName + " " + this.lastName;
+      }
+    }
+  });
+
+  const watchExampleVM = new Vue({
+  el: '#exampleWatch',
+  data: {
+    question: '',
+    answer: 'I cannot give you an answer until you ask a question!'
+  },
+  watch: {
+    // whenever question changes, this function will run
+    question: function (newQuestion) {
+      this.answer = 'Waiting for you to stop typing...'
+      this.getAnswer()
+    }
+  },
+  methods: {
+    // _.debounce is a function provided by lodash to limit how
+    // often a particularly expensive operation can be run.
+    // In this case, we want to limit how often we access
+    // yesno.wtf/api, waiting until the user has completely
+    // finished typing before making the ajax request. To learn
+    // more about the _.debounce function (and its cousin
+    // _.throttle), visit: https://lodash.com/docs#debounce
+    getAnswer: _.debounce(
+      function () {
+        if (this.question.indexOf('?') === -1) {
+          this.answer = 'Questions usually contain a question mark. ;-)'
+          return
+        }
+        this.answer = 'Thinking...'
+        var vm = this
+        axios.get('https://yesno.wtf/api')
+          .then(function (response) {
+            vm.answer = _.capitalize(response.data.answer)
+          })
+          .catch(function (error) {
+            vm.answer = 'Error! Could not reach the API. ' + error
+          })
+      },
+      // This is the number of milliseconds we wait for the
+      // user to stop typing.
+      500
+    )
+  }
+})
   </script>
 </html>
